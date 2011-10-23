@@ -14,12 +14,14 @@ class Poll(models.Model):
 class Choice(models.Model):
 	keyword = models.CharField(max_length=20)
 	description = models.CharField(max_length=200)
+	poll = models.ForeignKey('Poll')
 
 	def __unicode__(self):
 		return self.keyword
 
 class Vote(models.Model):
 	timestamp = models.DateTimeField('timestamp')
+	poll = models.ForeignKey('Choice')
 
 	class Meta:
 		abstract = True

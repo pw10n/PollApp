@@ -1,0 +1,13 @@
+- model: auth.User
+  pk: 1
+  fields:
+    is_active: True
+    is_staff: True
+    is_superuser: True
+    username: "god"
+    password: "sha1$82239$b2475762471eededf7c5bf13e055d2a96d7b146a"
+- model: sites.Site
+  pk: 1
+  fields:
+    domain: "change-me"
+    name: "site"

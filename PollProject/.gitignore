@@ -1,6 +1,9 @@
 # compiled 
 *.pyc
 
+# swap
+*.swp
+
 # OS generated files #
 ######################
 .DS_Store*

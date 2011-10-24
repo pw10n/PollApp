@@ -3,6 +3,10 @@
 {% block title %}Confirm Vote{% endblock %}
 
 {% block content %}
+
+You are about to vote for <b>"{{ keyword }}"</b> in the poll <b>"{{ poll.title }}"</b>.
+<p>
+Please click "Vote!" to cast your vote.
 	<form action="" method="post">
 	{% csrf_token %}
 	{{ form.as_p }}

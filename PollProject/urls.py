@@ -12,6 +12,7 @@ urlpatterns = patterns('',
     # url(r'^PollProject/', include('PollProject.foo.urls')),
 
 		(r'^vote/(?P<pk>\d+)/$', vote),	
+		(r'^vote/(?P<poll_pk>\d+)/(?P<keyword>\w+)/$', confirm),
 		(r'^success/(?P<poll_pk>\d+)/(?P<choice_pk>\d+)/$', success),
 
     # Uncomment the admin/doc line below to enable admin documentation:

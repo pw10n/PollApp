@@ -7,6 +7,7 @@ class ChoiceInline(admin.StackedInline):
 
 class PollAdmin(admin.ModelAdmin):
 	inlines = [ChoiceInline]
+	list_display = ('title', 'inactive')
 
 admin.site.register(Poll, PollAdmin)
 

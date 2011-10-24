@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Vote</title>
+</head>
+
+<body>
+	<form action="" method="post">
+	{% csrf_token %}
+	{{ form.as_p }}
+	</form>
+</body>
+</html>
+

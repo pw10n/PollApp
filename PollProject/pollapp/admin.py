@@ -10,4 +10,6 @@ class PollAdmin(admin.ModelAdmin):
 	list_display = ('title', 'inactive')
 
 admin.site.register(Poll, PollAdmin)
+admin.site.register(SmsVote)
+admin.site.register(WebVote)
 

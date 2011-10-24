@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block title %}Success!{% endblock %}
+
+{% block content %}
+You have successfully voted for <b>"{{ choice.keyword }}"</b> in the poll <b>"{{ poll.title }}"</b>.
+<p>
+Thanks for voting!
+{% endblock %}

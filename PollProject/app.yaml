@@ -1,12 +1,26 @@
 # app.yaml
-application: pollapp 
+application: vote4app 
 version: 1
 runtime: python
 api_version: 1
 
 handlers:
-- url: .*
-  script: main.py 
+- url: /_ah/remote_api
+  script: $PYTHON_LIB/google/appengine/ext/remote_api/handler.py
+  login: admin
 
+- url: /_ah/queue/deferred
+  script: djangoappengine/deferred/handler.py
+  login: admin
+
+- url: /static/(.*)
+  static_files: static/\1
+  upload: static/(.*)
+
+- url: /media
+  static_dir: static
+
+- url: /.*
+  script: djangoappengine/main/main.py
 builtins:
 - datastore_admin: on

@@ -37,6 +37,26 @@ class Vote(models.Model):
 class SmsVote(Vote):
 	phone_number = models.CharField(max_length=25)
 
+	@staticmethod
+	def userVotesByPoll(phone_number, poll):
+		poll_choices = Choices.objects.filter(poll=poll)
+		smsvotes = SmsVote.objects.all()
+		smsvotes_in_poll_by_sid = []
+		for smsvote in smsvotes:
+			if smsvote.choice in poll_choices and smsvote.phone_number == phone_number:
+				smsvotes_in_poll_by_sid += [smsvote]
+		return smsvotes_in_poll_by_sid
+
+	@staticmethod
+	def do_vote(phone_number, choice):
+		vote = SmsVote()
+		vote.choice = choice
+		vote.phone_number = phone_number
+		vote.timestamp = datetime.datetime.now()
+		vote.save()
+
+		return vote
+
 	def __unicode__(self):
 		return "SmsVote: %s (%s) " % (self.choice.keyword, self.phone_number)
 

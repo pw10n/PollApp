@@ -13,6 +13,7 @@ urlpatterns = patterns('',
 
 		(r'^vote/(?P<pk>\d+)/$', vote),	
 		(r'^vote/(?P<poll_pk>\d+)/(?P<keyword>\w+)/$', confirm),
+		(r'^sms/$',smsVote),
 		(r'^success/(?P<poll_pk>\d+)/(?P<choice_pk>\d+)/$', success),
 
     # Uncomment the admin/doc line below to enable admin documentation:

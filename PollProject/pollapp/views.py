@@ -8,6 +8,8 @@ from forms import VoteForm, ConfirmForm
 
 from models import *
 
+import re
+
 def vote(request, pk):
 	c = {}
 	poll = get_object_or_404(Poll, pk=pk)
@@ -49,6 +51,35 @@ def confirm(request, poll_pk, keyword):
 	c['keyword'] = keyword
 	return render_to_response('confirm.html', c)
 
+def smsVote(request):
+	if request.method == 'POST':
+		phone = request.POST['From']
+		message = request.POST['Body']
+		
+		# 1. validate Body, 2. validate has voted, 3. validate choice
+		match = re.match("(?P<poll_pk>\d+)\.(?P<keyword>\w+)", message)
+		if not match:
+			c['response'] = "Invalid request. (id=0)"
+		else:
+			try:
+				poll = Poll.objects.get(id=match.group("poll_pk"))
+				if SmsVote.userVotesByPoll(phone, poll):
+					c['response'] = "You have already voted in this poll."
+				else:
+					choice = poll.choiceByKeyword(match.group("keyword"))
+					if not choice:
+						c['response'] = "The item you are voting for does not exist."
+					else:
+						SmsVote.do_vote(phone, choice)
+						c['response'] = "You have voted for '%s' in the poll '%s'. Have a good day!" % (poll.title,keyword)
+
+			except ObjectNotFound:
+				c['response'] = "Invalid request. (id=1)"
+
+	else:
+		raise Http404
+	return render_to_response('smstwilio.html',c)
+		
 
 def success(request, poll_pk, choice_pk):
 	poll = get_object_or_404(Poll, pk=poll_pk)

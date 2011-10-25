@@ -30,3 +30,13 @@ indexes:
   properties:
   - name: __key__
     direction: desc
+
+- kind: pollapp_smsvote
+  properties:
+  - name: __key__
+    direction: desc
+
+- kind: pollapp_webvote
+  properties:
+  - name: __key__
+    direction: desc

@@ -2,6 +2,7 @@
 from django.core.context_processors import csrf
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponseRedirect, Http404
+from django.views.decorators.csrf import csrf_exempt
 from django import forms
 
 from forms import VoteForm, ConfirmForm
@@ -51,7 +52,9 @@ def confirm(request, poll_pk, keyword):
 	c['keyword'] = keyword
 	return render_to_response('confirm.html', c)
 
+@csrf_exempt
 def smsVote(request):
+	c = {}
 	if request.method == 'POST':
 		phone = request.POST['From']
 		message = request.POST['Body']

@@ -13,6 +13,10 @@ handlers:
   script: djangoappengine/deferred/handler.py
   login: admin
 
+- url: /static/admin
+  static_dir: django/contrib/admin/media
+  expiration: '0'
+
 - url: /static/(.*)
   static_files: static/\1
   upload: static/(.*)

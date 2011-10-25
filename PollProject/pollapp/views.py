@@ -1,4 +1,5 @@
 # Create your views here.
+from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.context_processors import csrf
 from django.shortcuts import render_to_response, get_object_or_404
@@ -13,6 +14,7 @@ from models import *
 import re
 
 def vote(request, pk):
+	request.session.set_test_cookie()
 	c = {}
 	poll = get_object_or_404(Poll, pk=pk)
 	
@@ -32,6 +34,7 @@ def vote(request, pk):
 	return render_to_response('vote.html', c)
 
 def confirm(request, poll_pk, keyword):
+	request.session.set_test_cookie()
 	c = {}
 	poll = get_object_or_404(Poll, pk=poll_pk)
 
@@ -54,6 +57,7 @@ def confirm(request, poll_pk, keyword):
 	return render_to_response('confirm.html', c)
 
 @csrf_exempt
+@login_required
 def smsVote(request):
 	c = {}
 	if request.method == 'POST':

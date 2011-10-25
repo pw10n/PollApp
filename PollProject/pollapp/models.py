@@ -39,7 +39,7 @@ class SmsVote(Vote):
 
 	@staticmethod
 	def userVotesByPoll(phone_number, poll):
-		poll_choices = Choices.objects.filter(poll=poll)
+		poll_choices = Choice.objects.filter(poll=poll)
 		smsvotes = SmsVote.objects.all()
 		smsvotes_in_poll_by_sid = []
 		for smsvote in smsvotes:

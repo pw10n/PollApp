@@ -1,4 +1,5 @@
 # Create your views here.
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.context_processors import csrf
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponseRedirect, Http404
@@ -66,20 +67,22 @@ def smsVote(request):
 		else:
 			try:
 				poll = Poll.objects.get(id=match.group("poll_pk"))
+				keyword = match.group("keyword")
 				if SmsVote.userVotesByPoll(phone, poll):
 					c['response'] = "You have already voted in this poll."
 				else:
-					choice = poll.choiceByKeyword(match.group("keyword"))
+					choice = poll.choiceByKeyword(keyword)
 					if not choice:
 						c['response'] = "The item you are voting for does not exist."
 					else:
 						SmsVote.do_vote(phone, choice)
 						c['response'] = "You have voted for '%s' in the poll '%s'. Have a good day!" % (poll.title,keyword)
 
-			except ObjectNotFound:
+			except ObjectDoesNotExist:
 				c['response'] = "Invalid request. (id=1)"
 
 	else:
+		print request.method
 		raise Http404
 	return render_to_response('smstwilio.html',c)
 		

@@ -1,6 +1,7 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django import forms
 from models import *
+import re
 
 class VoteForm(forms.Form):
 	sid_saved = forms.CharField(widget=forms.HiddenInput())
@@ -11,6 +12,10 @@ class VoteForm(forms.Form):
 		sid = self.cleaned_data['sid_saved']
 		poll_id = self.cleaned_data['poll_id']
 		data = self.cleaned_data['keyword']
+
+		match = re.match("((?P<poll_pk>\d+)\.)?(?P<keyword>\w+)", data)
+		if match:
+			data = match.group("keyword")
 
 		try:
 			poll = Poll.objects.get(id=poll_id)

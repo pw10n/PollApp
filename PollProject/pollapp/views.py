@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.context_processors import csrf
 from django.shortcuts import render_to_response, get_object_or_404
-from django.http import HttpResponseRedirect, Http404
+from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django import forms
 
@@ -11,7 +11,7 @@ from forms import VoteForm, ConfirmForm
 
 from models import *
 
-import re
+import re, base64
 
 def vote(request, pk):
 	request.session.set_test_cookie()
@@ -56,10 +56,25 @@ def confirm(request, poll_pk, keyword):
 	c['keyword'] = keyword
 	return render_to_response('confirm.html', c)
 
+def verify_auth(auth_header):
+	auth_parts = auth_header.split(' ')
+	user_pass_parts = base64.b64decode(auth_parts[1]).split(':')
+	user_arg = user_pass_parts[0]
+	pass_arg = user_pass_parts[1]
+
+	return user_arg == "twilio" and pass_arg == "tw1l10"
+
 @csrf_exempt
-@login_required
 def smsVote(request):
 	c = {}
+	print request.META
+
+	if not 'HTTP_AUTHORIZATION' in request.META or not verify_auth(request.META['HTTP_AUTHORIZATION']):
+		res = HttpResponse("Unauthorized")
+		res['WWW-Authenticate'] = 'Basic realm="pollapp"'
+		res.status_code = 401
+		return res
+
 	if request.method == 'POST':
 		phone = request.POST['From']
 		message = request.POST['Body']

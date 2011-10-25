@@ -22,7 +22,7 @@ def vote(request, pk):
 		form = VoteForm(request.POST)
 		if form.is_valid():
 			keyword = form.clean_keyword()
-			choice = get_object_or_404(Choice, keyword=keyword)
+			choice = poll.choiceByKeyword(keyword=keyword)
 			if choice and WebVote.do_vote(sid, choice):
 				return HttpResponseRedirect("/success/%s/%s/"%(poll.id,choice.id))
 	else:

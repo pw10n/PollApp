@@ -2,14 +2,22 @@
 
 {% block title %}Confirm Vote{% endblock %}
 
+{% block head %}
+<link href="{{ MEDIA_URL }}css/vote.css" rel="stylesheet" type="text/css" media="all />
+{% endblock %}
+
 {% block content %}
 
-You are about to vote for <b>"{{ keyword }}"</b> in the poll <b>"{{ poll.title }}"</b>.
+<div id="vote_box"><div id="vote_cbox_content">
+You are about to vote for 
+<div id="keyword_txt">{{ keyword }}</div>
+in the poll <b>{{ poll.title }}</b>.
 <p>
-Please click "Vote!" to cast your vote.
 	<form action="" method="post">
 	{% csrf_token %}
 	{{ form.as_p }}
 	<input type="submit" value="Vote!">
-	</form>
+Please click "Vote!" to cast your vote.
+</form>
+</div></div>
 {% endblock %}

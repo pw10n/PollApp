@@ -157,12 +157,12 @@ ROOT_DIR = os.path.dirname(__file__)
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = ROOT_DIR + '/media'
+MEDIA_ROOT = ROOT_DIR + '/static'
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/static/"
 STATICFILES_ROOT = ROOT_DIR + '/static'
-STATIC_ROOT = ROOT_DIR + '/static'
+STATIC_ROOT = ROOT_DIR + '/sstatic'
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 #MEDIA_ROOT = os.path.join(os.path.dirname(__file__), 'media')
 TEMPLATE_DIRS = (os.path.join(os.path.dirname(__file__), 'templates'),)

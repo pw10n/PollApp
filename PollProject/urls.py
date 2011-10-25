@@ -12,9 +12,11 @@ urlpatterns = patterns('',
     # url(r'^PollProject/', include('PollProject.foo.urls')),
 
 		(r'^vote/(?P<pk>\d+)/$', vote),	
-		(r'^vote/(?P<poll_pk>\d+)/(?P<keyword>\w+)/$', confirm),
+		(r'^vote/(?P<poll_pk>\d+)(/|\.)(?P<keyword>\w+)/$', confirm),
 		(r'^sms/$',smsVote),
 		(r'^success/(?P<poll_pk>\d+)/(?P<choice_pk>\d+)/$', success),
+
+		(r'^accounts/login/$', 'django.contrib.auth.views.login'),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),

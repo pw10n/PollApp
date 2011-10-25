@@ -2,9 +2,17 @@
 
 {% block title %}Vote{% endblock %}
 
+{% block head %}
+<link href="{{ MEDIA_URL }}css/vote.css" rel="stylesheet" type="text/css" media="all />
+{% endblock %}
+
 {% block content %}
+
+<div id="vote_box"><div id="vote_box_content">
 	<form action="" method="post">
 	{% csrf_token %}
 	{{ form.as_p }}
+	<input id="vote_btn" type="submit" value="Vote!">
 	</form>
+</div></div>
 {% endblock %}

@@ -16,7 +16,7 @@ in the poll <b>{{ poll.title }}</b>.
 	<form action="" method="post">
 	{% csrf_token %}
 	{{ form.as_p }}
-	<input type="submit" value="Vote!">
+	<input id="vote_btn" type="submit" value="Vote!">
 Please click "Vote!" to cast your vote.
 </form>
 </div></div>

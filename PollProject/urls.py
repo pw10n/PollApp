@@ -15,6 +15,7 @@ urlpatterns = patterns('',
 		(r'^vote/(?P<poll_pk>\d+)(/|\.)(?P<keyword>\w+)/$', confirm),
 		(r'^sms/$',smsVote),
 		(r'^success/(?P<poll_pk>\d+)/(?P<choice_pk>\d+)/$', success),
+		(r'^cause_an_error/$', cause_an_error),
 
 		(r'^accounts/login/$', 'django.contrib.auth.views.login'),
 

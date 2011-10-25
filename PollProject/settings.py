@@ -2,7 +2,7 @@ from djangoappengine.settings_base import *
 import os
 # Django settings for PollProject project.
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -161,7 +161,7 @@ MEDIA_ROOT = ROOT_DIR + '/static'
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/static/"
-STATICFILES_ROOT = ROOT_DIR + '/static'
+#STATICFILES_ROOT = ROOT_DIR + '/static'
 STATIC_ROOT = ROOT_DIR + '/sstatic'
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 #MEDIA_ROOT = os.path.join(os.path.dirname(__file__), 'media')

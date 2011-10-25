@@ -6,6 +6,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django import forms
+from django.template import RequestContext
 
 from forms import VoteForm, ConfirmForm
 
@@ -13,13 +14,16 @@ from models import *
 
 import re, base64
 
+
+### Vote Views ###
+
 def vote(request, pk):
 	request.session.set_test_cookie()
 	c = {}
 	poll = get_object_or_404(Poll, pk=pk)
 	
 	c.update(csrf(request))
-	sid = request.COOKIES['sessionid']
+	sid = request.session.session_key
 	if request.method == 'POST':
 		form = VoteForm(request.POST)
 		if form.is_valid():
@@ -31,7 +35,7 @@ def vote(request, pk):
 		form = VoteForm(initial={'poll_id':poll.id,'sid_saved':sid})
 
 	c['form'] = form
-	return render_to_response('vote.html', c)
+	return render_to_response('vote.html', c, context_instance=RequestContext(request))
 
 def confirm(request, poll_pk, keyword):
 	request.session.set_test_cookie()
@@ -39,7 +43,7 @@ def confirm(request, poll_pk, keyword):
 	poll = get_object_or_404(Poll, pk=poll_pk)
 
 	c.update(csrf(request))
-	sid = request.COOKIES['sessionid']
+	sid = request.session.session_key
 
 	if request.method == 'POST':
 		form = ConfirmForm(request.POST)
@@ -54,7 +58,7 @@ def confirm(request, poll_pk, keyword):
 	c['form'] = form
 	c['poll'] = poll
 	c['keyword'] = keyword
-	return render_to_response('confirm.html', c)
+	return render_to_response('confirm.html', c, context_instance=RequestContext(request))
 
 def verify_auth(auth_header):
 	auth_parts = auth_header.split(' ')
@@ -103,11 +107,31 @@ def smsVote(request):
 	else:
 		print request.method
 		raise Http404
-	return render_to_response('smstwilio.html',c)
+	return render_to_response('smstwilio.html', c, context_instance=RequestContext(request))
 		
-
 def success(request, poll_pk, choice_pk):
 	poll = get_object_or_404(Poll, pk=poll_pk)
 	choice = get_object_or_404(Choice, pk=choice_pk)
-	return render_to_response('success.html', {'poll':poll,'choice':choice})
+	return render_to_response('success.html', {'poll':poll,'choice':choice}, context_instance=RequestContext(request))
+
+### Poll Menu ###
+
+@login_required
+def poll_view_menu(request):
+	pass
+
+### Poll Viewer ###
+
+@login_required
+def poll_view(request, poll):
+	pass
+
+### Poll Analytics ###
+
+@login_required
+def poll_stats(request, poll):
+	pass
+
+def cause_an_error(request):
+	print poop
 

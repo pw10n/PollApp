@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Poll: {{ poll.title }}{% endblock %}
+
+{% block content %}
+<h2>{{ poll.title }}</h2>
+
+<table>
+	<tr>
+		<th>Keyword</th>
+		<th>Description</th>
+		<th>QR Code</th>
+	</tr>
+	{% for cp in poll_choice_urls %}
+	<tr>
+		<td><input type="text" value="{{ poll.id }}.{{ cp.choice.keyword }}"></input></td>
+		<td>{{ cp.choice.description }}</td>
+		<td><a href="http://chart.apis.google.com/chart?chs=545x545&cht=qr&chl={{ cp.vote_url|urlencode }}"><img src="http://chart.apis.google.com/chart?chs=400x400&cht=qr&chl={{ cp.vote_url|urlencode }}"/></a></td>
+	</tr>
+	{% endfor %}
+</table>
+
+
+{% endblock %}

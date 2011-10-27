@@ -11,11 +11,16 @@ urlpatterns = patterns('',
     # url(r'^$', 'PollProject.views.home', name='home'),
     # url(r'^PollProject/', include('PollProject.foo.urls')),
 
+		(r'^$', vote_generic),
 		(r'^vote/(?P<pk>\d+)/$', vote),	
 		(r'^vote/(?P<poll_pk>\d+)(/|\.)(?P<keyword>\w+)/$', confirm),
 		(r'^sms/$',smsVote),
 		(r'^success/(?P<poll_pk>\d+)/(?P<choice_pk>\d+)/$', success),
 		(r'^cause_an_error/$', cause_an_error),
+		(r'^polls/$', poll_menu),
+		(r'^polls/view/(?P<poll_pk>\d+)/$', poll_view),
+		(r'^polls/view/(?P<poll_pk>\d+)/choice/(?P<keyword>\w+)/$', choice_view),
+		(r'^polls/view/(?P<poll_pk>\d+)/stat/$', poll_stats),
 
 		(r'^accounts/login/$', 'django.contrib.auth.views.login'),
 

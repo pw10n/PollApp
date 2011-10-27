@@ -2,7 +2,7 @@ from djangoappengine.settings_base import *
 import os
 # Django settings for PollProject project.
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (

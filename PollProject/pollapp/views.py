@@ -17,6 +17,31 @@ import re, base64
 
 ### Vote Views ###
 
+def vote_generic(request):
+	request.session.set_test_cookie()
+	c = {}
+	c.update(csrf(request))
+	sid = request.session.session_key
+	poll = None
+	choice = None
+
+	if request.method == 'POST':
+		form = VoteForm(request.POST)
+		if form.is_valid():
+			keyword_field = form.clean_keyword()
+			match = re.match("((?P<poll_pk>\d+)\.)?(?P<keyword>\w+)", keyword_field)
+			keyword = match.group("keyword")
+			poll_pk = match.group("poll_pk") 
+			if poll_pk:
+				poll = Poll.objects.get(id=poll_pk)
+			choice = poll.choiceByKeyword(keyword=keyword)
+			if choice and poll and WebVote.do_vote(sid, choice):
+				return HttpResponseRedirect("/success/%s/%s/"%(poll.id,choice.id))
+	else:
+		form = VoteForm(initial={'sid_saved':sid})
+	c['form'] = form
+	return render_to_response('vote.html', c, context_instance=RequestContext(request))
+
 def vote(request, pk):
 	request.session.set_test_cookie()
 	c = {}
@@ -27,7 +52,9 @@ def vote(request, pk):
 	if request.method == 'POST':
 		form = VoteForm(request.POST)
 		if form.is_valid():
-			keyword = form.clean_keyword()
+			keyword_field = form.clean_keyword()
+			match = re.match("((?P<poll_pk>\d+)\.)?(?P<keyword>\w+)", keyword_field)
+			keyword = match.group("keyword")
 			choice = poll.choiceByKeyword(keyword=keyword)
 			if choice and WebVote.do_vote(sid, choice):
 				return HttpResponseRedirect("/success/%s/%s/"%(poll.id,choice.id))
@@ -117,19 +144,35 @@ def success(request, poll_pk, choice_pk):
 ### Poll Menu ###
 
 @login_required
-def poll_view_menu(request):
-	pass
+def poll_menu(request):
+	c = {}
+	c['polls'] = Poll.objects.filter(inactive=False)
+	return render_to_response('poll_menu.html', c, context_instance=RequestContext(request))
 
 ### Poll Viewer ###
 
 @login_required
-def poll_view(request, poll):
+def poll_view(request, poll_pk):
+	c = {}
+	poll = get_object_or_404(Poll, pk=poll_pk)
+	c['poll'] = poll
+	poll_choices = Choice.objects.filter(poll=poll)
+	pcu = []
+	for choice in poll_choices:
+		#TODO: get the site URL instead of hardcoding it to our app.
+		pcu += [{'choice':choice,'vote_url':'http://vote4app.appspot.com/vote/%d/%s/'%(poll.id,choice.keyword)}]
+	c['poll_choice_urls'] = pcu 
+	return render_to_response('poll_view.html', c, context_instance=RequestContext(request))
+
+### Choice Viewer ###
+@login_required
+def choice_view(request, poll_pk, keyword):
 	pass
 
 ### Poll Analytics ###
 
 @login_required
-def poll_stats(request, poll):
+def poll_stats(request, poll_pk):
 	pass
 
 def cause_an_error(request):
